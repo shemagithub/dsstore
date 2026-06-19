@@ -1,4 +1,4 @@
-import { API_BASE, apiUrl } from "../config/api";
+import {  apiUrl } from "../config/api";
 
 const request = async (path, options = {}) => {
   const token = localStorage.getItem("admin_token");
