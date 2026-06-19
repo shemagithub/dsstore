@@ -1,4 +1,3 @@
-import { API_BASE } from "../config/api";
 import { resolveMediaUrl } from "./media";
 
 export const DEFAULT_STORE_NAME = "Didier Shoes Store";
