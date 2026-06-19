@@ -1,18 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import "./raw.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
+import { StoreProvider } from "./context/StoreContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
 
-import { RootProvider } from "./context";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
-      <RootProvider>
-        <App />
-      </RootProvider>
+    <BrowserRouter>
+      <StoreProvider>
+        <AdminAuthProvider>
+          <App />
+        </AdminAuthProvider>
+      </StoreProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

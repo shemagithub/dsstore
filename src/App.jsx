@@ -1,18 +1,31 @@
 import React from "react";
-import Landing from "./pages/Landing";
 import { Routes, Route } from "react-router-dom";
-import ComponentsCategories from "./pages/ComponentsCategories";
-import Footer from "./Components/Footer";
+import Layout from "./Components/Layout";
+import Landing from "./pages/Landing";
+import ShoeDetail from "./pages/ShoeDetail";
+import AdminLogin from "./pages/Admin/AdminLogin";
+import AdminLayout from "./pages/Admin/AdminLayout";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminShoes from "./pages/Admin/AdminShoes";
+import AdminPromotions from "./pages/Admin/AdminPromotions";
+import AdminCompany from "./pages/Admin/AdminCompany";
 
 const App = () => {
   return (
-    <main className="bg-gray-50 text-gray-900 dark:bg-dark2 dark:text-gray-100 min-h-screen">
-      <Routes>
+    <Routes>
+      <Route element={<Layout />}>
         <Route path="/" element={<Landing />} />
-        <Route path="/components" element={<ComponentsCategories />} />
-      </Routes>
-      <Footer />
-    </main>
+        <Route path="/shoe/:id" element={<ShoeDetail />} />
+      </Route>
+
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="shoes" element={<AdminShoes />} />
+        <Route path="promotions" element={<AdminPromotions />} />
+        <Route path="company" element={<AdminCompany />} />
+      </Route>
+    </Routes>
   );
 };
 
