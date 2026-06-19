@@ -3,7 +3,7 @@
   var hostname = window.location.hostname;
   var API_BASE =
     hostname === "localhost" || hostname === "127.0.0.1"
-      ? "http://dss.finverra.co"
+      ? "https://dss.rwandaquesttours.com"
       : "";
 
   function resolveMediaUrl(url) {
