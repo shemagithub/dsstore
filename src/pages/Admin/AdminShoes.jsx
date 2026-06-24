@@ -15,7 +15,7 @@ const emptyShoe = {
   rating: 4.5,
   accentColor: "#FFE400",
   sizes: ["9 UK", "10 UK"],
-  colorOptions: [{ name: "Yellow", hex: "#FFE400" }],
+  colorOptions: [],
   multiVariant: false,
   images: [],
   description: "",
@@ -56,9 +56,7 @@ const AdminShoes = () => {
       ...shoe,
       images: getShoeImages(shoe),
       sizes: shoe.sizes || [],
-      colorOptions: shoe.colorOptions?.length
-        ? shoe.colorOptions
-        : [{ name: "Default", hex: shoe.accentColor || "#FFE400" }],
+      colorOptions: shoe.colorOptions || [],
     });
   };
 
@@ -78,10 +76,9 @@ const AdminShoes = () => {
       const selected = prev.colorOptions.some(
         (c) => c.hex.toLowerCase() === color.hex.toLowerCase()
       );
-      let colorOptions = selected
+      const colorOptions = selected
         ? prev.colorOptions.filter((c) => c.hex.toLowerCase() !== color.hex.toLowerCase())
         : [...prev.colorOptions, color];
-      if (colorOptions.length === 0) colorOptions = [color];
       return {
         ...prev,
         colorOptions,
@@ -95,7 +92,6 @@ const AdminShoes = () => {
       const colorOptions = prev.colorOptions.filter(
         (c) => colorKey(c) !== colorKey(color)
       );
-      if (colorOptions.length === 0) return prev;
       return {
         ...prev,
         colorOptions,
@@ -130,10 +126,6 @@ const AdminShoes = () => {
 
     if (!form.sizes.length) {
       setMessage("Select at least one size");
-      return;
-    }
-    if (!form.colorOptions.length) {
-      setMessage("Select at least one color");
       return;
     }
     if (!form.images?.length) {
@@ -251,7 +243,9 @@ const AdminShoes = () => {
         </div>
 
         <div className="sm:col-span-2">
-          <p className="text-sm text-store-muted mb-2">Available colors — pick from presets or add custom</p>
+          <p className="text-sm text-store-muted mb-2">
+            Available colors (optional) — pick from presets or add custom, or leave empty
+          </p>
           <div className="flex flex-wrap gap-3 mb-4">
             {PRESET_COLORS.map((color) => {
               const selected = isColorSelected(color);
@@ -354,7 +348,9 @@ const AdminShoes = () => {
                   <p className="font-bold text-white">{shoe.name}</p>
                   <p className="text-sm text-store-muted">{formatRFW(shoe.price)}</p>
                   <p className="text-xs text-store-muted mt-1">
-                    {(shoe.sizes || []).join(", ")} · {(shoe.colorOptions || []).map((c) => c.name).join(", ")}
+                    {(shoe.sizes || []).join(", ")}
+                    {(shoe.colorOptions || []).length > 0 &&
+                      ` · ${(shoe.colorOptions || []).map((c) => c.name).join(", ")}`}
                   </p>
                 </div>
               </div>

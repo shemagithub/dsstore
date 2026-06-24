@@ -31,18 +31,20 @@ const ShoeCard = ({ shoe, promoDateKey }) => {
         />
       </div>
 
-      <div className="flex justify-center gap-2 mb-4">
-        {colorOptions.map((c, i) => (
-          <span
-            key={c.name}
-            title={c.name}
-            className={`w-4 h-4 rounded-full border-2 ${
-              i === 0 ? "border-store-yellow" : "border-transparent"
-            }`}
-            style={{ backgroundColor: c.hex }}
-          />
-        ))}
-      </div>
+      {colorOptions.length > 0 && (
+        <div className="flex justify-center gap-2 mb-4">
+          {colorOptions.map((c, i) => (
+            <span
+              key={c.name}
+              title={c.name}
+              className={`w-4 h-4 rounded-full border-2 ${
+                i === 0 ? "border-store-yellow" : "border-transparent"
+              }`}
+              style={{ backgroundColor: c.hex }}
+            />
+          ))}
+        </div>
+      )}
 
       <h4 className="text-store-yellow font-bold text-lg sm:text-xl group-hover:text-yellow-300 transition-colors">
         {shoe.name}

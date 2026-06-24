@@ -12,6 +12,7 @@ const ShoeOrderPanel = ({ shoe, promoDateLabel }) => {
 
   const sizes = getSizes(shoe);
   const colorOptions = getColorOptions(shoe);
+  const hasColors = colorOptions.length > 0;
 
   const [quantity, setQuantity] = useState(1);
   const [selections, setSelections] = useState([
@@ -64,8 +65,12 @@ const ShoeOrderPanel = ({ shoe, promoDateLabel }) => {
       <h2 className="text-lg font-bold text-white mb-1">Configure your order</h2>
       <p className="text-store-muted text-sm mb-6">
         {shoe.multiVariant
-          ? "Select size and color. For multiple pairs you can choose a different size and color for each item."
-          : "Select your preferred size and color, then choose quantity."}
+          ? hasColors
+            ? "Select size and color. For multiple pairs you can choose a different size and color for each item."
+            : "Select size. For multiple pairs you can choose a different size for each item."
+          : hasColors
+            ? "Select your preferred size and color, then choose quantity."
+            : "Select your preferred size, then choose quantity."}
       </p>
 
       {!showPerItemConfig && (
@@ -90,29 +95,31 @@ const ShoeOrderPanel = ({ shoe, promoDateLabel }) => {
             </div>
           </div>
 
-          <div className="mb-5">
-            <p className="text-xs text-store-muted uppercase tracking-wider mb-3">Color</p>
-            <div className="flex flex-wrap gap-3">
-              {colorOptions.map((c, i) => (
-                <button
-                  key={c.name}
-                  type="button"
-                  onClick={() => updateItem(0, "colorIndex", i)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-full border-2 transition-all ${
-                    selections[0]?.colorIndex === i
-                      ? "border-store-yellow bg-store-yellow/10"
-                      : "border-store-border hover:border-store-yellow/40"
-                  }`}
-                >
-                  <span
-                    className="w-5 h-5 rounded-full border border-white/20"
-                    style={{ backgroundColor: c.hex }}
-                  />
-                  <span className="text-sm text-white">{c.name}</span>
-                </button>
-              ))}
+          {hasColors && (
+            <div className="mb-5">
+              <p className="text-xs text-store-muted uppercase tracking-wider mb-3">Color</p>
+              <div className="flex flex-wrap gap-3">
+                {colorOptions.map((c, i) => (
+                  <button
+                    key={c.name}
+                    type="button"
+                    onClick={() => updateItem(0, "colorIndex", i)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-full border-2 transition-all ${
+                      selections[0]?.colorIndex === i
+                        ? "border-store-yellow bg-store-yellow/10"
+                        : "border-store-border hover:border-store-yellow/40"
+                    }`}
+                  >
+                    <span
+                      className="w-5 h-5 rounded-full border border-white/20"
+                      style={{ backgroundColor: c.hex }}
+                    />
+                    <span className="text-sm text-white">{c.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
 
@@ -169,23 +176,27 @@ const ShoeOrderPanel = ({ shoe, promoDateLabel }) => {
                   </button>
                 ))}
               </div>
-              <p className="text-[10px] text-store-muted uppercase tracking-wider mb-2">Color</p>
-              <div className="flex flex-wrap gap-2">
-                {colorOptions.map((c, i) => (
-                  <button
-                    key={c.name}
-                    type="button"
-                    onClick={() => updateItem(index, "colorIndex", i)}
-                    title={c.name}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      sel.colorIndex === i
-                        ? "border-store-yellow ring-2 ring-store-yellow/30"
-                        : "border-store-border"
-                    }`}
-                    style={{ backgroundColor: c.hex }}
-                  />
-                ))}
-              </div>
+              {hasColors && (
+                <>
+                  <p className="text-[10px] text-store-muted uppercase tracking-wider mb-2">Color</p>
+                  <div className="flex flex-wrap gap-2">
+                    {colorOptions.map((c, i) => (
+                      <button
+                        key={c.name}
+                        type="button"
+                        onClick={() => updateItem(index, "colorIndex", i)}
+                        title={c.name}
+                        className={`w-8 h-8 rounded-full border-2 transition-all ${
+                          sel.colorIndex === i
+                            ? "border-store-yellow ring-2 ring-store-yellow/30"
+                            : "border-store-border"
+                        }`}
+                        style={{ backgroundColor: c.hex }}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           ))}
         </div>
@@ -197,14 +208,14 @@ const ShoeOrderPanel = ({ shoe, promoDateLabel }) => {
           {shoe.multiVariant && quantity > 1
             ? selections.map((sel, i) => (
                 <li key={i}>
-                  {i + 1}. {sel.size} · {colorOptions[sel.colorIndex]?.name} —{" "}
-                  {formatRFW(shoe.price)}
+                  {i + 1}. {sel.size}
+                  {hasColors && ` · ${colorOptions[sel.colorIndex]?.name}`} — {formatRFW(shoe.price)}
                 </li>
               ))
             : (
                 <li>
-                  {selections[0]?.size} · {colorOptions[selections[0]?.colorIndex]?.name} ×{" "}
-                  {quantity}
+                  {selections[0]?.size}
+                  {hasColors && ` · ${colorOptions[selections[0]?.colorIndex]?.name}`} × {quantity}
                 </li>
               )}
         </ul>

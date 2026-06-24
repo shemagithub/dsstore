@@ -128,12 +128,15 @@ const ShoeDetail = () => {
             <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-store-muted">
               <span><span className="text-store-yellow">★</span> {shoe.rating} rating</span>
               <span>{shoe.sizes?.length || 0} sizes available</span>
-              <span>{shoe.colorOptions?.length || 0} colors</span>
+              {shoe.colorOptions?.length > 0 && (
+                <span>{shoe.colorOptions.length} colors</span>
+              )}
             </div>
 
             {shoe.multiVariant && (
               <p className="mt-3 text-xs text-store-yellow bg-store-yellow/10 border border-store-yellow/20 rounded-full px-3 py-1 w-fit">
-                Multi-pair orders — pick different size & color per item
+                Multi-pair orders — pick different size
+                {shoe.colorOptions?.length > 0 ? " & color" : ""} per item
               </p>
             )}
 

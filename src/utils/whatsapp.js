@@ -2,9 +2,10 @@ import { formatRFW } from "./currency";
 
 export const WHATSAPP_NUMBER = "250788123456";
 
-export const getColorOptions = (shoe) =>
-  shoe.colorOptions ||
-  (shoe.colors || []).map((hex, i) => ({ name: `Color ${i + 1}`, hex }));
+export const getColorOptions = (shoe) => {
+  if (Array.isArray(shoe.colorOptions)) return shoe.colorOptions;
+  return (shoe.colors || []).map((hex, i) => ({ name: `Color ${i + 1}`, hex }));
+};
 
 export const getSizes = (shoe) => shoe.sizes || (shoe.size ? [shoe.size] : []);
 
@@ -28,14 +29,15 @@ export const getWhatsAppOrderLink = (
   if (shoe.multiVariant && quantity > 1) {
     lines.push("*Items:*");
     selections.forEach((sel, i) => {
-      lines.push(
-        `${i + 1}. Size ${sel.size}, Color ${colors[sel.colorIndex]?.name || "—"}`
-      );
+      const colorPart = colors.length > 0 ? `, Color ${colors[sel.colorIndex]?.name || "—"}` : "";
+      lines.push(`${i + 1}. Size ${sel.size}${colorPart}`);
     });
   } else {
     const sel = selections[0];
     lines.push(`Size: ${sel.size}`);
-    lines.push(`Color: ${colors[sel.colorIndex]?.name || "—"}`);
+    if (colors.length > 0) {
+      lines.push(`Color: ${colors[sel.colorIndex]?.name || "—"}`);
+    }
     lines.push(`Quantity: ${quantity}`);
   }
 
